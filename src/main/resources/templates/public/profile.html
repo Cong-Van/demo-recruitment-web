@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <head>
+    <title>Work CV</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/open-iconic-bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/css/animate.css" />
+    <link rel="stylesheet" href="/assets/css/owl.carousel.min.css" />
+    <link rel="stylesheet" href="/assets/css/owl.theme.default.min.css" />
+    <link rel="stylesheet" href="/assets/css/magnific-popup.css" />
+    <link rel="stylesheet" href="/assets/css/owl.carousel.min.css" />
+    <link rel="stylesheet" href="/assets/css/owl.theme.default.min.css" />
+    <link rel="stylesheet" href="/assets/css/aos.css" />
+    <link rel="stylesheet" href="/assets/css/ionicons.min.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap-datepicker.css" />
+    <link rel="stylesheet" href="/assets/css/jquery.timepicker.css" />
+    <link rel="stylesheet" href="/assets/css/css/bootstrap-reboot.css" />
+    <link rel="stylesheet" href="/assets/css/css/mixins/_text-hide.css" />
+    <link rel="stylesheet" href="/assets/css/flaticon.css" />
+    <link rel="stylesheet" href="/assets/css/icomoon.css" />
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap-grid.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap-reboot.css" />
+
+    <!-- JS -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/jquery.easing.1.3.js"></script>
+    <script src="/assets/js/jquery.waypoints.min.js"></script>
+    <script src="/assets/js/jquery.stellar.min.js"></script>
+    <script src="/assets/js/owl.carousel.min.js"></script>
+    <script src="/assets/js/jquery.magnific-popup.min.js"></script>
+    <script src="/assets/js/aos.js"></script>
+    <script src="/assets/js/jquery.animateNumber.min.js"></script>
+    <script src="/assets/js/scrollax.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+    <script src="/assets/js/google-map.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/29.0.0/classic/ckeditor.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  </head>
+
+  <body>
+    <nav
+      class="header_menu navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light"
+      id="ftco-navbar"
+    >
+      <div class="container-fluid px-md-4">
+        <a class="navbar-brand" href="/home">Work CV</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#ftco-nav"
+          aria-controls="ftco-nav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="oi oi-menu"></span> Menu
+        </button>
+
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a href="/home" class="nav-link">Trang chủ</a>
+            </li>
+            <li class="nav-item">
+              <a th:href="@{/recruitment}" class="nav-link">Công việc</a>
+            </li>
+            <li class="nav-item">
+              <a th:href="@{/auth/candidateList}" class="nav-link"
+                >Ứng cử viên</a
+              >
+            </li>
+
+            <li class="nav-item">
+              <a
+                href=""
+                class="nav-link"
+                th:text="${session.user.fullName}"
+              ></a>
+
+              <ul class="dropdown">
+                <li>
+                  <a th:href="@{/profile}">Hồ Sơ</a>
+                </li>
+                <li sec:authorize="hasAuthority('Ứng cử viên')">
+                  <a th:href="@{/candidate/jobSavedList}">Công việc đã lưu</a>
+                </li>
+                <li sec:authorize="hasAuthority('Công ty')">
+                  <a th:href="@{/auth/postList}">Danh sách bài đăng</a>
+                </li>
+                <li sec:authorize="hasAuthority('Ứng cử viên')">
+                  <a th:href="@{/candidate/jobAppliedList}"
+                    >Công việc đã ứng tuyển</a
+                  >
+                </li>
+                <li sec:authorize="hasAuthority('Ứng cử viên')">
+                  <a th:href="@{/candidate/companiesFollowed}"
+                    >Công ty đã theo dõi</a
+                  >
+                </li>
+                <li>
+                  <a href="#" th:href="@{/logout}">Đăng xuất</a>
+                </li>
+              </ul>
+            </li>
+
+            <li class="nav-item cta mr-md-1">
+              <a th:href="@{/auth/postRecruitment}" class="nav-link"
+                >Đăng tuyển</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div
+      class="hero-wrap hero-wrap-2"
+      style="background-image: url(/assets/images/bg_1.jpg)"
+      data-stellar-background-ratio="0.5"
+    >
+      <div class="overlay"></div>
+      <div class="container">
+        <div
+          class="row no-gutters slider-text align-items-end justify-content-start"
+        >
+          <div class="col-md-12 text-center mb-5">
+            <h1 class="mb-2 bread">Hồ sơ</h1>
+            <form
+              th:action="@{/uploadUserImage}"
+              enctype="multipart/form-data"
+              method="post"
+            >
+              <input type="hidden" name="userId" th:value="${userDTO.id}" />
+              <label class="btn btn-info btn-file m-1">
+                Chọn ảnh<input
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  id="fileUpload"
+                  class="form-control-file"
+                  required
+                  hidden
+                />
+              </label>
+              <button type="submit" class="btn btn-primary m-1">Upload</button>
+            </form>
+            <span
+              th:if="${msgImg != null}"
+              th:text="${msgImg}"
+              style="color: #fff"
+            ></span>
+            <div style="margin-left: 0px" id="divImage">
+              <img
+                height="120"
+                width="120"
+                style="border-radius: 50%; margin-top: 10px; margin-bottom: 0"
+                th:if="${userDTO.image != null}"
+                th:src="@{'/assets/images/' + ${userDTO.image}}"
+              />
+              <img
+                height="120"
+                width="120"
+                style="border-radius: 50%; margin-top: 10px; margin-bottom: 0"
+                th:if="${userDTO.image == null}"
+                th:src="${'https://st.quantrimang.com/photos/image/072015/22/avatar.jpg'}"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Xác thực email cho User là đại diện Công ty -->
+    <div
+      sec:authorize="hasAuthority('Công ty')"
+      th:if="${session.user.status == 0}"
+      class="container-fluid"
+      style="text-align: center"
+    >
+      <p
+        style="
+          font-size: 20px;
+          font-weight: bold;
+          color: #aaa;
+          margin-top: 10px;
+        "
+      >
+        Xác thực email đăng nhập
+      </p>
+      <div
+        style="
+          width: 600px;
+          height: 400px;
+          border-radius: 5px;
+          box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;
+          margin: 20px auto;
+          padding: 15px;
+        "
+      >
+        <p style="line-height: 35px; font-size: 16px">
+          Xin chào, <span th:text="${userDTO.fullName}"></span> và làm theo
+          hướng dẫn trong email. Trường hợp không nhận được email, bạn vui lòng
+          bấm nút Nhận email xác thực dưới đây.
+        </p>
+        <div class="row form-group">
+          <form
+            th:action="@{/auth/confirmAccount}"
+            method="post"
+            class="col-md-12"
+          >
+            <input
+              type="hidden"
+              th:value="${userDTO.email}"
+              name="email"
+              class="btn px-4 btn-primary text-white"
+            />
+            <input
+              type="submit"
+              value="Nhận email xác thực"
+              class="btn px-4 btn-primary text-white"
+            />
+          </form>
+        </div>
+        <p>Mọi thắc mắc vui lòng liên hệ bộ phận CSKH của WorkCV:<br /></p>
+        - Điện thoại:<span style="color: #5f80ec">(024) 6680 5588</span><br />
+        - Email: <a href="#" style="color: #5f80ec"> hotro@workcv.vn</a>
+      </div>
+      <div
+        th:if="${comfirm_await}"
+        style="
+          width: 600px;
+          height: 400px;
+          border-radius: 5px;
+          box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;
+          margin: 20px auto;
+          padding: 15px;
+        "
+      >
+        <p style="line-height: 35px; font-size: 16px">
+          Xin chào, <span th:text="${userDTO.fullName}"></span> .Bạn đã gửi yêu
+          cầu xác thực thành công, vui lòng kiểm tra mail để xác thực.Cảm ơn
+          bạn!!!
+        </p>
+        <p>Mọi thắc mắc vui lòng liên hệ bộ phận CSKH của WorkCV:<br /></p>
+        - Điện thoại:<span style="color: #5f80ec">(024) 6680 5588</span><br />
+        - Email: <a href="#" style="color: #5f80ec"> hotro@workcv.vn</a>
+      </div>
+    </div>
+    <!-- Xác thực email -->
+
+    <!-- Cập nhật thông tin cho User là Ứng cử viên -->
+    <section
+      sec:authorize="hasAuthority('Ứng cử viên')"
+      class="site-section"
+      style="margin-top: 10px"
+    >
+      <div class="container">
+        <div class="row align-items-center mb-5">
+          <div class="col-lg-8">
+            <div class="d-flex align-items-center">
+              <div class="form-group" style="margin-top: 15px">
+                <form
+                  th:action="@{/uploadCandidateCv}"
+                  enctype="multipart/form-data"
+                  method="post"
+                >
+                  <input type="hidden" name="userId" th:value="${userDTO.id}" />
+                  <label class="btn btn-info btn-file">
+                    Chọn cv (pdf)<input
+                      type="file"
+                      name="file"
+                      accept=".pdf"
+                      id="fileUpload1"
+                      class="form-control-file"
+                      required
+                      hidden
+                    />
+                  </label>
+                  <button type="submit" class="btn btn-primary mb-2">
+                    Upload
+                  </button>
+                </form>
+                <span
+                  style="color: #6f42c1"
+                  th:if="${msgCv != null}"
+                  th:text="${msgCv}"
+                ></span>
+              </div>
+            </div>
+            <p
+              id="cv"
+              th:text="${cv.fileName != null ? cv.fileName : 'Chưa cập nhật'}"
+            ></p>
+            <a
+              id="show-cv"
+              th:if="${cv.fileName != null}"
+              th:href="@{'/assets/images/' + ${cv.fileName}}"
+              >Xem cv</a
+            >
+            <a
+              href=""
+              style="color: red; margin-left: 20px"
+              th:if="${cv.fileName !=null}"
+              data-toggle="modal"
+              data-target="#exampleModal"
+              >Xóa cv</a
+            >
+          </div>
+
+          <!-- <div class="col-lg-4">
+              <div class="row">
+                <div class="col-6">
+                  <button
+                    type="submit"
+                    id="myBtn"
+                    class="btn btn-block btn-light btn-md"
+                  >
+                    <span class="icon-open_in_new mr-2"></span>Cập nhật cv
+                  </button>
+                </div>
+              </div>
+            </div> -->
+        </div>
+
+        <form th:action="@{/candidate/update-profile}" method="post">
+          <div class="row align-items-center mb-5">
+            <div class="col-lg-8 mb-4 mb-lg-0">
+              <div class="d-flex align-items-center">
+                <div>
+                  <h2>Cập nhật thông tin</h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="row">
+                <div class="col-6">
+                  <button
+                    type="submit"
+                    class="btn btn-block btn-primary btn-md"
+                  >
+                    Lưu thông tin
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-5">
+            <div class="col-lg-12">
+              <div class="p-4 p-md-5 border rounded" method="post">
+                <h3 class="text-black mb-5 border-bottom pb-2">
+                  Thông tin chi tiết
+                </h3>
+                <div class="form-group">
+                  <label for="user2-email">Email</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="user2-email"
+                    name="email"
+                    th:value="${userDTO.email}"
+                    readonly
+                    placeholder="you@yourdomain.com"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="user2-full-name">Full name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="fullName"
+                    th:value="${userDTO.fullName}"
+                    readonly
+                    id="user2-full-name"
+                    placeholder="Full name"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="user2-address">Địa chỉ</label>
+                  <input
+                    type="text"
+                    name="address"
+                    th:value="${userDTO.address}"
+                    class="form-control"
+                    id="user2-address"
+                    required
+                    placeholder="e.g. New York"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="user2-phone-number">Số điện thoại</label>
+                  <input
+                    type="tel"
+                    name="phoneNumber"
+                    th:value="${userDTO.phoneNumber}"
+                    class="form-control"
+                    id="user2-phone-number"
+                    pattern="[0-9]{10}"
+                    required
+                    placeholder="0123456789"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="user2-description">Mô tả bản thân</label>
+                  <textarea
+                    name="description"
+                    th:text="${userDTO.description}"
+                    class="form-control"
+                    id="user2-description"
+                    placeholder="Mô tả"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Bạn có chắc chắn muốn xóa ?
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Cv : <span id="cvXoa"></span>
+            <span th:if="${cv != null}" th:text="${cv.fileName}"></span>
+            <form th:action="@{/candidate/deleteCv}" method="post">
+              <div class="modal-footer mt-1">
+                <input type="hidden" name="cvId" th:value="${cv.id}" />
+                <input
+                  type="hidden"
+                  name="userId"
+                  th:value="${session.user.id}"
+                />
+                <button
+                  type="submit"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Đóng
+                </button>
+                <button type="submit" class="btn btn-danger">Xóa</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Cập nhật thông tin cho User là Ứng cử viên -->
+
+    <!-- Cập nhật thông tin cho User là đại diện Công ty -->
+    <section
+      sec:authorize="hasAuthority('Công ty')"
+      th:if="${session.user.status == 1}"
+      class="site-section"
+      style="margin-top: 10px"
+    >
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 mb-5">
+            <h2 class="mb-4">Thông tin cá nhân</h2>
+            <form th:action="@{auth/update-profile}" method="post">
+              <div class="row mb-5">
+                <div class="col-lg-12">
+                  <div class="p-4 p-md-5 border rounded">
+                    <div class="form-group">
+                      <label for="user1-email">Email</label>
+                      <input
+                        type="email"
+                        class="form-control"
+                        id="user1-email"
+                        name="email"
+                        th:value="${userDTO.email}"
+                        readonly
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="user1-full-name">Họ và tên</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="fullName"
+                        th:value="${userDTO.fullName}"
+                        id="user1-full-name"
+                        readonly
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="user1-address">Địa chỉ</label>
+                      <input
+                        type="text"
+                        name="address"
+                        th:value="${userDTO.address}"
+                        required
+                        class="form-control"
+                        id="user1-address"
+                        placeholder="e.g. New York"
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="user1-phone-number">Số điện thoại</label>
+                      <input
+                        type="tel"
+                        name="phoneNumber"
+                        th:value="${userDTO.phoneNumber}"
+                        class="form-control"
+                        id="user1-phone-number"
+                        pattern="[0-9]{10}"
+                        required
+                        placeholder="0123456789"
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="user1-description">Mô tả bản thân</label>
+                      <textarea
+                        name="description"
+                        th:text="${userDTO.description}"
+                        class="form-control"
+                        id="user1-description"
+                        placeholder="Mô tả"
+                      ></textarea>
+                    </div>
+
+                    <div class="row form-group">
+                      <div class="col-md-12">
+                        <input
+                          type="submit"
+                          value="Lưu thông tin"
+                          class="btn px-4 btn-primary text-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- Cập nhật thông tin cho công ty -->
+          <div class="col-lg-6">
+            <h2 class="mb-4">Thông tin công ty</h2>
+            <div class="form-group">
+              <label class="company-website-tw d-block1">Cập nhật Logo</label>
+              <br />
+              <form
+                th:action="@{/uploadCompanyLogo}"
+                enctype="multipart/form-data"
+                method="post"
+              >
+                <input type="hidden" name="userId" th:value="${userDTO.id}" />
+                <label
+                  class="btn btn-info btn-md btn-file mr-2"
+                  style="display: inline"
+                >
+                  Chọn logo<input
+                    type="file"
+                    name="logo"
+                    accept="image/*"
+                    id="fileUpload2"
+                    class="form-control-file"
+                    required
+                    hidden
+                  />
+                </label>
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  style="display: inline"
+                >
+                  Upload
+                </button>
+              </form>
+              <span
+                th:if="${msgLogo != null}"
+                th:text="${msgLogo}"
+                style="color: #0d6efd"
+              ></span>
+              <p
+                th:text="${message}"
+                th:if="${message ne null}"
+                class="alert alert-primary"
+              ></p>
+              <div id="divLogo">
+                <img
+                  height="100"
+                  width="100"
+                  style="border-radius: 50%; margin-top: 10px"
+                  th:if="${companyDTO.logo == null}"
+                  th:src="${'https://st.quantrimang.com/photos/image/072015/22/avatar.jpg'}"
+                />
+                <img
+                  height="100"
+                  width="100"
+                  style="border-radius: 50%; margin-top: 10px"
+                  th:if="${companyDTO.logo != null}"
+                  th:src="@{'/assets/images/' + ${companyDTO.logo}}"
+                />
+              </div>
+            </div>
+            <form
+              th:action="@{auth/update-company}"
+              method="post"
+              enctype="multipart/form-data"
+            >
+              <div class="row mb-5">
+                <div class="col-lg-12">
+                  <div class="p-4 p-md-5 border rounded">
+                    <input
+                      type="hidden"
+                      name="userId"
+                      th:value="${userDTO.id}"
+                    />
+
+                    <div class="form-group">
+                      <label for="company-email">Email</label>
+                      <input
+                        type="email"
+                        class="form-control"
+                        required
+                        id="company-email"
+                        name="email"
+                        th:value="${companyDTO.email}"
+                        placeholder="you@yourdomain.com"
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="company-name">Tên công ty</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        name="companyName"
+                        th:value="${companyDTO.companyName}"
+                        id="company-name"
+                        placeholder="Name"
+                        required
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="company-address">Địa chỉ</label>
+                      <input
+                        type="text"
+                        name="address"
+                        th:value="${companyDTO.address}"
+                        required
+                        class="form-control"
+                        id="company-address"
+                        placeholder="e.g. New York"
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="company-phone-number"
+                        >Số điện thoại công ty</label
+                      >
+                      <input
+                        type="number"
+                        name="phoneNumber"
+                        th:value="${companyDTO.phoneNumber}"
+                        required
+                        class="form-control"
+                        id="company-phone-number"
+                        placeholder="+ 84"
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label for="company-description">Mô tả công ty</label>
+                      <textarea
+                        name="description"
+                        th:text="${companyDTO.description}"
+                        class="form-control"
+                        id="company-description"
+                        placeholder="Mô tả"
+                      ></textarea>
+                    </div>
+
+                    <div
+                      style="margin-left: 0px"
+                      id="divImag1"
+                      th:if="${companyDTO.logo != null}"
+                    >
+                      <img
+                        id="avatar2"
+                        height="100"
+                        width="100"
+                        style="border-radius: 50px; margin-bottom: 15px"
+                        th:src="@{'/assets/images/' + ${companyDTO.logo}}"
+                      />
+                    </div>
+                    <div class="row form-group">
+                      <div class="col-md-12">
+                        <input
+                          type="submit"
+                          value="Lưu thông tin"
+                          class="btn px-4 btn-primary text-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="ftco-footer ftco-bg-dark ftco-section"></footer>
+  </body>
+</html>

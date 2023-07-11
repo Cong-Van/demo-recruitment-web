@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <head>
+    <title>Skillhunt - Free Bootstrap 4 Template by Colorlib</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <!-- CSS -->
+    <link rel="stylesheet" href="/assets/css/open-iconic-bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/css/animate.css" />
+    <link rel="stylesheet" href="/assets/css/owl.carousel.min.css" />
+    <link rel="stylesheet" href="/assets/css/owl.theme.default.min.css" />
+    <link rel="stylesheet" href="/assets/css/magnific-popup.css" />
+    <link rel="stylesheet" href="/assets/css/owl.carousel.min.css" />
+    <link rel="stylesheet" href="/assets/css/owl.theme.default.min.css" />
+    <link rel="stylesheet" href="/assets/css/aos.css" />
+    <link rel="stylesheet" href="/assets/css/ionicons.min.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap-datepicker.css" />
+    <link rel="stylesheet" href="/assets/css/jquery.timepicker.css" />
+    <link rel="stylesheet" href="/assets/css/css/bootstrap-reboot.css" />
+    <link rel="stylesheet" href="/assets/css/css/mixins/_text-hide.css" />
+    <link rel="stylesheet" href="/assets/css/flaticon.css" />
+    <link rel="stylesheet" href="/assets/css/icomoon.css" />
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap-grid.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap/bootstrap-reboot.css" />
+
+    <!-- JS -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/jquery.easing.1.3.js"></script>
+    <script src="/assets/js/jquery.waypoints.min.js"></script>
+    <script src="/assets/js/jquery.stellar.min.js"></script>
+    <script src="/assets/js/owl.carousel.min.js"></script>
+    <script src="/assets/js/jquery.magnific-popup.min.js"></script>
+    <script src="/assets/js/aos.js"></script>
+    <script src="/assets/js/jquery.animateNumber.min.js"></script>
+    <script src="/assets/js/scrollax.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+    <script src="/assets/js/google-map.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/29.0.0/classic/ckeditor.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid px-md-4">
+        <a class="navbar-brand" href="/home">Work CV</a>
+
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a href="/home" class="nav-link">Trang chủ</a>
+            </li>
+            <li class="nav-item">
+              <a th:href="@{/recruitment}" class="nav-link">Công việc</a>
+            </li>
+            <li class="nav-item" sec:authorize="hasAuthority('Công ty')">
+              <a th:href="@{/auth/candidateList}" class="nav-link"
+                >Ứng cử viên</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                href=""
+                class="nav-link"
+                th:text="${session.user.fullName}"
+              ></a>
+
+              <ul class="dropdown">
+                <li>
+                  <a th:href="@{/profile}">Hồ Sơ</a>
+                </li>
+                <li sec:authorize="hasAuthority('Ứng cử viên')">
+                  <a th:href="@{/candidate/jobSavedList}">Công việc đã lưu</a>
+                </li>
+                <li sec:authorize="hasAuthority('Công ty')">
+                  <a th:href="@{/auth/postList}">Danh sách bài đăng</a>
+                </li>
+                <li sec:authorize="hasAuthority('Ứng cử viên')">
+                  <a th:href="@{/candidate/jobAppliedList}"
+                    >Công việc đã ứng tuyển</a
+                  >
+                </li>
+                <li sec:authorize="hasAuthority('Ứng cử viên')">
+                  <a th:href="@{/candidate/companiesFollowed}"
+                    >Công ty đã theo dõi</a
+                  >
+                </li>
+                <li>
+                  <a href="#" th:href="@{/logout}">Đăng xuất</a>
+                </li>
+              </ul>
+            </li>
+            <li
+              class="nav-item cta mr-md-1"
+              sec:authorize="hasAuthority('Công ty')"
+            >
+              <a th:href="@{/auth/postRecruitment}" class="nav-link"
+                >Đăng tuyển</a
+              >
+            </li>
+            <li
+              class="nav-item cta mr-md-1"
+              sec:authorize="hasAuthority('Ứng cử viên')"
+            >
+              <a href="" class="nav-link"
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- END nav -->
+
+    <!-- END nav -->
+    <div
+      th:if="${msgApply == true}"
+      class="toast"
+      data-delay="2000"
+      style="
+        position: fixed;
+        top: 100px;
+        right: 10px;
+        z-index: 2000;
+        width: 300px;
+      "
+    >
+      <script>
+        swal({
+          title: "Ứng tuyển thành công!",
+          /* text: 'Redirecting...', */
+          icon: "success",
+          timer: 3000,
+          buttons: true,
+          type: "success",
+        });
+      </script>
+    </div>
+
+    <div
+      th:if="${msgApply == false}"
+      class="toast"
+      data-delay="2000"
+      style="
+        position: fixed;
+        top: 100px;
+        right: 10px;
+        z-index: 2000;
+        width: 300px;
+      "
+    >
+      <input type="hidden" id="messageValue" th:value="${message}" />
+      <script>
+        var message = document.getElementById("messageValue").value;
+        swal({
+          title: message,
+          /* text: 'Redirecting...', */
+          icon: "error",
+          timer: 3000,
+          buttons: true,
+          type: "error",
+        });
+      </script>
+    </div>
+
+    <div
+      class="hero-wrap hero-wrap-2"
+      style="background-image: url('/assets/images/bg_1.jpg')"
+      data-stellar-background-ratio="0.5"
+    >
+      <div class="overlay"></div>
+      <div class="container">
+        <div
+          class="row no-gutters slider-text align-items-end justify-content-start"
+        >
+          <div class="col-md-12 text-center mb-5">
+            <p class="breadcrumbs mb-0">
+              <span class="mr-3"
+                ><a href="/home">Trang chủ</a>&nbsp;&nbsp;&nbsp;<i
+                  class="ion-ios-arrow-forward"
+                ></i></span
+              >Chi tiết<span></span>
+            </p>
+            <h1 class="mb-3 bread">Chi tiết công việc</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section style="margin-top: 10px" class="site-section">
+      <div class="container">
+        <div class="row align-items-center mb-5">
+          <div class="col-lg-8 mb-4 mb-lg-0">
+            <div class="d-flex align-items-center">
+              <div class="border p-2 d-inline-block mr-3 rounded">
+                <img
+                  width="100"
+                  height="100"
+                  th:if="${recruitment.company.logo != null}"
+                  th:src="@{'/assets/images/' + ${recruitment.company.logo}}"
+                  alt="Image"
+                />
+                <img
+                  width="100"
+                  height="100"
+                  th:if="${recruitment.company.logo == null}"
+                  th:src="${'https://st.quantrimang.com/photos/image/072015/22/avatar.jpg'}"
+                  alt="Image"
+                />
+              </div>
+              <div>
+                <h2 th:text="${recruitment.title}"></h2>
+                <div>
+                  <span class="icon-briefcase mr-2"></span
+                  ><a
+                    class="ml-0 mr-2 mb-2 text-primary"
+                    th:text="${recruitment.company.companyName}"
+                    th:href="${'/company/detail/'} + ${recruitment.company.id}"
+                  ></a>
+                  <span class="icon-room mr-2"></span
+                  ><span class="m-2" th:text="${recruitment.address}"></span>
+                  <span class="icon-clock-o mr-2"></span
+                  ><span class="m-2" th:text="${recruitment.type}"></span>
+                </div>
+                <input type="hidden" />
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="row" th:if="${session.user.role.id == 2}">
+              <div class="col-6">
+                <a
+                  class="btn btn-block btn-light btn-md"
+                  th:if="${#arrays.contains(recruitmentsSaved, recruitment)}"
+                  th:href="${'/candidate/saveJob/'} + ${recruitment.id}"
+                  ><span
+                    class="icon-heart mr-2 text-danger"
+                    style="color: red !important"
+                  ></span
+                  >Bỏ lưu</a
+                >
+                <a
+                  class="btn btn-block btn-light btn-md"
+                  th:if="${!#arrays.contains(recruitmentsSaved, recruitment)}"
+                  th:href="${'/candidate/saveJob/'} + ${recruitment.id}"
+                  ><span class="icon-heart-o mr-2 text-danger"></span>Lưu</a
+                >
+              </div>
+              <div class="col-6">
+                <a
+                  data-toggle="modal"
+                  class="btn btn-block btn-primary btn-md"
+                  data-target="#exampleModal"
+                  >Ứng tuyển</a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="mb-5">
+              <h3 class="h5 d-flex align-items-center mb-4 text-primary">
+                <span class="icon-align-left mr-3"></span>Mô tả công việc
+              </h3>
+              <p th:text="${recruitment.description}"></p>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="bg-light p-3 border rounded mb-4">
+              <h3 class="text-primary mt-3 h5 pl-3 mb-3">Tóm tắt công việc</h3>
+              <ul class="list-unstyled pl-3 mb-0">
+                <li class="mb-2">
+                  <strong class="text-black">Ngày tạo: </strong>
+                  <span th:text="${recruitment.createdAt}"></span>
+                </li>
+                <li class="mb-2">
+                  <strong class="text-black">Kiểu công việc: </strong>
+                  <span th:text="${recruitment.type}"></span>
+                </li>
+                <li class="mb-2">
+                  <strong class="text-black">Loại công việc: </strong>
+                  <span th:text="${recruitment.category.name}"></span>
+                </li>
+                <li class="mb-2">
+                  <strong class="text-black">Kinh nghiệm: </strong>
+                  <span th:text="${recruitment.experience}"></span>
+                </li>
+                <li class="mb-2">
+                  <strong class="text-black">Đại chỉ: </strong>
+                  <span th:text="${recruitment.address}"></span>
+                </li>
+                <li class="mb-2">
+                  <strong class="text-black">Lương: </strong>
+                  <span th:text="${recruitment.salary}"></span>
+                </li>
+                <li class="mb-2">
+                  <strong class="text-black">Số lượng: </strong
+                  ><span th:text="${recruitment.quantity}"></span>
+                </li>
+                <li class="mb-2">
+                  <strong class="text-black">Hạn nộp cv: </strong
+                  ><span th:text="${recruitment.deadline}"></span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="bg-light p-3 border rounded">
+              <h3 class="text-primary mt-3 h5 pl-3 mb-3">Share</h3>
+              <div class="px-3">
+                <a href="#" class="pt-3 pb-3 pr-3 pl-0"
+                  ><span class="icon-facebook"></span
+                ></a>
+                <a href="#" class="pt-3 pb-3 pr-3 pl-0"
+                  ><span class="icon-twitter"></span
+                ></a>
+                <a href="#" class="pt-3 pb-3 pr-3 pl-0"
+                  ><span class="icon-linkedin"></span
+                ></a>
+                <a href="#" class="pt-3 pb-3 pr-3 pl-0"
+                  ><span class="icon-pinterest"></span
+                ></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              Ứng tuyển: <span></span>
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form
+            method="post"
+            th:action="@{/candidate/applyJob}"
+            enctype="multipart/form-data"
+          >
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-12">
+                  <select
+                    id="choose"
+                    onchange="choosed()"
+                    class="form-control"
+                    aria-label="Default select example"
+                    name="type"
+                  >
+                    <option selected disabled>Chọn phương thức nộp</option>
+                    <option value="1">Dùng cv đã cập nhật</option>
+                    <option value="2">Nộp cv mới</option>
+                  </select>
+                </div>
+
+                <div id="loai1" style="display: none" class="col-12">
+                  <input
+                    type="hidden"
+                    name="userId"
+                    th:value="${session.user.id}"
+                  />
+                  <input
+                    type="hidden"
+                    name="recruitmentId"
+                    th:value="${recruitment.id}"
+                  />
+                  <label for="text1" class="col-form-label">Giới thiệu:</label
+                  ><textarea
+                    rows="10"
+                    cols="3"
+                    class="form-control"
+                    id="text1"
+                    name="text1"
+                  ></textarea>
+                </div>
+
+                <div id="loai2" style="display: none" class="col-12">
+                  <label for="fileUpload" class="col-form-label"
+                    >Chọn cv:</label
+                  >
+                  <input
+                    type="file"
+                    name="file"
+                    accept=".pdf"
+                    class="form-control"
+                    id="fileUpload"
+                  />
+                  <label for="text2" class="col-form-label">Giới thiệu:</label
+                  ><textarea
+                    rows="10"
+                    cols="3"
+                    class="form-control"
+                    id="text2"
+                    name="text2"
+                  ></textarea>
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Đóng
+                </button>
+                <button
+                  type="submit"
+                  th:id="button"
+                  style="display: none"
+                  class="btn btn-primary"
+                >
+                  Nộp
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <section class="site-section" id="next">
+      <div class="container">
+        <div class="row mb-5 justify-content-center">
+          <div class="col-md-7 text-center">
+            <h2 class="section-title mb-2" th:if="${session.user.role.id == 1}">
+              Danh sách ứng viên ứng tuyển
+            </h2>
+            <h2 class="section-title mb-2" th:if="${session.user.role.id == 2}">
+              Những công việc liên quan
+            </h2>
+          </div>
+        </div>
+
+        <!-- Hiển thị lượt apply đối với HR -->
+        <div th:if="${session.user.role.id == 1}" class="row">
+          <div class="col-lg-12 pr-lg-4">
+            <div class="row">
+              <th:block
+                th:if="${applyPosts.size() > 0}"
+                th:each="applyPost : ${applyPosts}"
+              >
+                <div
+                  class="col-md-12"
+                  style="
+                    box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;
+                    margin: 20px auto;
+                  "
+                >
+                  <div class="team d-md-flex p-4 bg-white">
+                    <img
+                      class="img"
+                      th:if="${applyPost.user.image == null}"
+                      th:src="${'https://st.quantrimang.com/photos/image/072015/22/avatar.jpg'}"
+                    />
+                    <img
+                      class="img"
+                      th:if="${applyPost.user.image != null}"
+                      th:src="@{'/assets/images/' + ${applyPost.user.image}}"
+                    />
+                    <div class="text pl-md-4">
+                      <h5
+                        class="location mb-0"
+                        th:text="${applyPost.user.fullName}"
+                      ></h5>
+                      <p
+                        style="display: block; color: black"
+                        th:text="${applyPost.user.address}"
+                      ></p>
+                      <span
+                        class="position"
+                        style="display: block; color: black"
+                        th:text="${applyPost.user.email}"
+                      ></span>
+                      <p
+                        class="mb-4"
+                        style="width: 700px"
+                        th:utext="${applyPost.user.description}"
+                      >
+                        .
+                      </p>
+                      <div class="row">
+                        <p>
+                          <a
+                            class="btn btn-primary"
+                            th:if="${applyPost.recruitment.company.id == session.user.company.id}"
+                            th:href="@{'/assets/images/' + ${applyPost.cvName}}"
+                            >Xem cv</a
+                          >
+                        </p>
+                        <p
+                          th:if="${applyPost.status == 0 && applyPost.recruitment.company.id == session.user.company.id}"
+                          style="margin-left: 10px"
+                        >
+                          <a
+                            class="btn btn-outline-primary"
+                            th:href="${'/auth/approve/'} +${applyPost.id} +${'/'} +${recruitment.id}"
+                            >Duyệt</a
+                          >
+                        </p>
+                        <p
+                          th:if="${applyPost.status == 1 && applyPost.recruitment.company.id == session.user.company.id}"
+                          style="margin-left: 10px; margin-top: 8px"
+                        >
+                          <span style="color: #1e7e34; font-weight: bold"
+                            >Đã duyệt</span
+                          >
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </th:block>
+              <div th:if="${applyPosts.size() == 0}">
+                <p>Chưa có ứng cử viên nào ứng tuyển</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 sidebar">
+            <div class="sidebar-box bg-white p-4 ftco-animate">
+              <h3 class="heading-sidebar">Browse Category</h3>
+              <form action="#" class="search-form mb-3">
+                <div class="form-group">
+                  <span class="icon icon-search"></span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Search..."
+                  />
+                </div>
+              </form>
+              <form action="#" class="browse-form">
+                <label for="option-job-1"
+                  ><input
+                    type="checkbox"
+                    id="option-job-1"
+                    name="vehicle"
+                    value=""
+                    checked
+                  />
+                  Website &amp; Software</label
+                ><br />
+                <label for="option-job-2"
+                  ><input
+                    type="checkbox"
+                    id="option-job-2"
+                    name="vehicle"
+                    value=""
+                  />
+                  Education &amp; Training</label
+                ><br />
+                <label for="option-job-3"
+                  ><input
+                    type="checkbox"
+                    id="option-job-3"
+                    name="vehicle"
+                    value=""
+                  />
+                  Graphics Design</label
+                ><br />
+                <label for="option-job-4"
+                  ><input
+                    type="checkbox"
+                    id="option-job-4"
+                    name="vehicle"
+                    value=""
+                  />
+                  Accounting &amp; Finance</label
+                ><br />
+                <label for="option-job-5"
+                  ><input
+                    type="checkbox"
+                    id="option-job-5"
+                    name="vehicle"
+                    value=""
+                  />
+                  Restaurant &amp; Food</label
+                ><br />
+                <label for="option-job-6"
+                  ><input
+                    type="checkbox"
+                    id="option-job-6"
+                    name="vehicle"
+                    value=""
+                  />
+                  Health &amp; Hospital</label
+                ><br />
+              </form>
+            </div>
+
+            <div class="sidebar-box bg-white p-4 ftco-animate">
+              <h3 class="heading-sidebar">Select Location</h3>
+              <form action="#" class="search-form mb-3">
+                <div class="form-group">
+                  <span class="icon icon-search"></span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Search..."
+                  />
+                </div>
+              </form>
+              <form action="#" class="browse-form">
+                <label for="option-location-1"
+                  ><input
+                    type="checkbox"
+                    id="option-location-1"
+                    name="vehicle"
+                    value=""
+                    checked
+                  />
+                  Sydney, Australia</label
+                ><br />
+                <label for="option-location-2"
+                  ><input
+                    type="checkbox"
+                    id="option-location-2"
+                    name="vehicle"
+                    value=""
+                  />
+                  New York, United States</label
+                ><br />
+                <label for="option-location-3"
+                  ><input
+                    type="checkbox"
+                    id="option-location-3"
+                    name="vehicle"
+                    value=""
+                  />
+                  Tokyo, Japan</label
+                ><br />
+                <label for="option-location-4"
+                  ><input
+                    type="checkbox"
+                    id="option-location-4"
+                    name="vehicle"
+                    value=""
+                  />
+                  Manila, Philippines</label
+                ><br />
+                <label for="option-location-5"
+                  ><input
+                    type="checkbox"
+                    id="option-location-5"
+                    name="vehicle"
+                    value=""
+                  />
+                  Seoul, South Korea</label
+                ><br />
+                <label for="option-location-6"
+                  ><input
+                    type="checkbox"
+                    id="option-location-6"
+                    name="vehicle"
+                    value=""
+                  />
+                  Western City, UK</label
+                ><br />
+              </form>
+            </div>
+
+            <div class="sidebar-box bg-white p-4 ftco-animate">
+              <h3 class="heading-sidebar">Job Type</h3>
+              <form action="#" class="browse-form">
+                <label for="option-job-type-1"
+                  ><input
+                    type="checkbox"
+                    id="option-job-type-1"
+                    name="vehicle"
+                    value=""
+                    checked
+                  />
+                  Partime</label
+                ><br />
+                <label for="option-job-type-2"
+                  ><input
+                    type="checkbox"
+                    id="option-job-type-2"
+                    name="vehicle"
+                    value=""
+                  />
+                  Fulltime</label
+                ><br />
+                <label for="option-job-type-3"
+                  ><input
+                    type="checkbox"
+                    id="option-job-type-3"
+                    name="vehicle"
+                    value=""
+                  />
+                  Intership</label
+                ><br />
+                <label for="option-job-type-4"
+                  ><input
+                    type="checkbox"
+                    id="option-job-type-4"
+                    name="vehicle"
+                    value=""
+                  />
+                  Temporary</label
+                ><br />
+                <label for="option-job-type-5"
+                  ><input
+                    type="checkbox"
+                    id="option-job-type-5"
+                    name="vehicle"
+                    value=""
+                  />
+                  Freelance</label
+                ><br />
+                <label for="option-job-type-6"
+                  ><input
+                    type="checkbox"
+                    id="option-job-type-6"
+                    name="vehicle"
+                    value=""
+                  />
+                  Fixed</label
+                ><br />
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hiển thị những bài tuyển dụng có tiêu đề tương tự cho ứng viên -->
+        <th:block th:each="recruitment : ${recruitmentsRelated}">
+          <div th:if="${session.user.role.id == 2}" class="col-md-12">
+            <div class="job-post-item p-4 d-block d-lg-flex align-items-center">
+              <div class="one-third mb-4 mb-md-0">
+                <div class="job-post-item-header align-items-center">
+                  <span class="subadge" th:text="${recruitment.type}"></span>
+                  <h2 class="mr-3 text-black">
+                    <a
+                      th:text="${recruitment.title}"
+                      th:href="${'/recruitment/detail/'} +${recruitment.id}"
+                    ></a>
+                  </h2>
+                </div>
+                <div class="job-post-item-body d-block d-md-flex">
+                  <div class="mr-3">
+                    <span class="icon-layers"></span>
+                    <a
+                      href="#"
+                      th:text="${recruitment.company.companyName}"
+                    ></a>
+                  </div>
+                  <div>
+                    <span class="icon-my_location"></span>
+                    <span th:text="${recruitment.address}"></span>
+                  </div>
+                </div>
+              </div>
+
+              <input
+                type="hidden"
+                th:id="${'idRe'}+${recruitment.id}"
+                th:value="${recruitment.id}"
+              />
+            </div>
+          </div>
+          <!-- end -->
+        </th:block>
+
+        <script>
+          function choosed() {
+            var name = "#choose";
+            var name1 = "loai1";
+            var name2 = "loai2";
+            var button = "button";
+            var giaitri = $(name).val();
+            if (giaitri == 1) {
+              document.getElementById(name1).style.display = "block";
+              document.getElementById(name2).style.display = "none";
+              document.getElementById(button).style.display = "block";
+            } else {
+              document.getElementById(name2).style.display = "block";
+              document.getElementById(name1).style.display = "none";
+              document.getElementById(button).style.display = "block";
+            }
+          }
+        </script>
+      </div>
+    </section>
+
+    <footer class="ftco-footer ftco-bg-dark ftco-section"></footer>
+  </body>
+</html>
