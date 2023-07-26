@@ -2,7 +2,7 @@ package com.funix.prj_321x.asm02.controller;
 
 import com.funix.prj_321x.asm02.DTO.UserDTO;
 import com.funix.prj_321x.asm02.entity.*;
-import com.funix.prj_321x.asm02.service.CommonService;
+import com.funix.prj_321x.asm02.service.CandidateService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.core.io.ClassPathResource;
@@ -25,13 +25,11 @@ import java.util.List;
 @RequestMapping("/candidate")
 public class CandidateController {
 
-    private CommonService commonService;
+    private CandidateService candidateService;
 
-    public CandidateController(CommonService commonService) {
-        this.commonService = commonService;
+    public CandidateController(CandidateService candidateService) {
+        this.candidateService = candidateService;
     }
-
-
 
     // Kết quả tìm kiếm công việc bằng tên (title) của bài đăng
     @GetMapping("/searchJob")
@@ -48,7 +46,7 @@ public class CandidateController {
 
         int pageSize = 5;
 
-        Page<Recruitment> page = commonService.findRecruitmentPaginationSearchByTitle(keySearch, pageNo, pageSize);
+        Page<Recruitment> page = candidateService.findRecruitmentPaginationSearchByTitle(keySearch, pageNo, pageSize);
         List<Recruitment> recruitments = page.getContent();
 
         addAttributeToModel(theModel, keySearch, http);
@@ -75,7 +73,7 @@ public class CandidateController {
 
         int pageSize = 5;
 
-        Page<Recruitment> page = commonService.findRecruitmentPaginationSearchByCompany(keySearch, pageNo, pageSize);
+        Page<Recruitment> page = candidateService.findRecruitmentPaginationSearchByCompany(keySearch, pageNo, pageSize);
         List<Recruitment> recruitments = page.getContent();
 
         addAttributeToModel(theModel, keySearch, http);
@@ -102,7 +100,7 @@ public class CandidateController {
 
         int pageSize = 5;
 
-        Page<Recruitment> page = commonService.findRecruitmentPaginationSearchByAddress(keySearch, pageNo, pageSize);
+        Page<Recruitment> page = candidateService.findRecruitmentPaginationSearchByAddress(keySearch, pageNo, pageSize);
         List<Recruitment> recruitments = page.getContent();
 
         addAttributeToModel(theModel, keySearch, http);
@@ -117,9 +115,9 @@ public class CandidateController {
     public void addAttributeToModel(Model theModel, String keySearch, HttpServletRequest http) {
 
         // Số lượng ứng viên, công ty và bài đăng hiển thị đầu trang
-        List<User> candidates =  commonService.getAllCandidate();
-        List<Company> companies = commonService.getAllCompany();
-        List<Recruitment> recruitments = commonService.getAllRecruitment();
+        List<User> candidates =  candidateService.getAllCandidate();
+        List<Company> companies = candidateService.getAllCompany();
+        List<Recruitment> recruitments = candidateService.getAllRecruitment();
 
         theModel.addAttribute("candidateQuantity", candidates.size());
         theModel.addAttribute("companyQuantity", companies.size());
@@ -130,7 +128,7 @@ public class CandidateController {
         HttpSession session = http.getSession();
         User userSes = (User) session.getAttribute("user");
 
-        User user = commonService.getUserById(userSes.getId());
+        User user = candidateService.getUserById(userSes.getId());
 
         theModel.addAttribute("recruitmentsSaved", user.getRecruitments());
     }
@@ -141,9 +139,9 @@ public class CandidateController {
     public String updateProfile(@ModelAttribute("userDTO") UserDTO userDTO, Model theModel) {
 
         // Lấy ra user và cập nhật thông tin cho user
-        User user = commonService.getUserByEmail(userDTO.getEmail());
-        commonService.setUserInf(user, userDTO);
-        commonService.saveUser(user);
+        User user = candidateService.getUserByEmail(userDTO.getEmail());
+        candidateService.setUserInf(user, userDTO);
+        candidateService.saveUser(user);
 
         return "redirect:/profile";
     }
@@ -152,10 +150,10 @@ public class CandidateController {
     public String deleteCv(@RequestParam("cvId") int cvId, @RequestParam("userId") int userId) {
 
         // Xóa Cv và Cv tương ứng trong user
-        User user = commonService.getUserById(userId);
+        User user = candidateService.getUserById(userId);
         user.setCv(null);
 
-        commonService.deleteCvById(cvId);
+        candidateService.deleteCvById(cvId);
 
         return "redirect:/profile";
     }
@@ -310,10 +308,10 @@ public class CandidateController {
         Hoặc dùng Cv có sẵn và lưu lại
         Nếu đã có lượt ứng tuyển thì báo đã ứng tuyển
          */
-        User user = commonService.getUserById(userId);
-        Recruitment recruitment = commonService.getRecruitmentById(recruitmentId);
+        User user = candidateService.getUserById(userId);
+        Recruitment recruitment = candidateService.getRecruitmentById(recruitmentId);
 
-        ApplyPost applyPost = commonService.getApplyPostByUserIdAndRecruitmentId(userId, recruitmentId);
+        ApplyPost applyPost = candidateService.getApplyPostByUserIdAndRecruitmentId(userId, recruitmentId);
 
         if (applyPost == null) {
             applyPost = new ApplyPost();
@@ -323,7 +321,7 @@ public class CandidateController {
             if (type == 2 && !file.isEmpty()) {
                 applyPost.setCvName(file.getOriginalFilename());
                 applyPost.setText(text2);
-                commonService.saveApplyPost(applyPost);
+                candidateService.saveApplyPost(applyPost);
 
                 // Lưu lại file
                 File saveFile = new ClassPathResource("static/assets/images").getFile();
@@ -335,7 +333,7 @@ public class CandidateController {
             } else if (type == 1 && user.getCv() != null) {
                 applyPost.setCvName(user.getCv().getFileName());
                 applyPost.setText(text1);
-                commonService.saveApplyPost(applyPost);
+                candidateService.saveApplyPost(applyPost);
 
                 msgApply = true;
             }
@@ -452,11 +450,11 @@ public class CandidateController {
         HttpSession session = http.getSession();
         User userSes = (User) session.getAttribute("user");
 
-        User user = commonService.getUserById(userSes.getId());
+        User user = candidateService.getUserById(userSes.getId());
         List<Recruitment> recruitmentsSaved = user.getRecruitments();
 
         // Lưu hoặc bỏ lưu công việc
-        Recruitment recruitment = commonService.getRecruitmentById(recruitmentId);
+        Recruitment recruitment = candidateService.getRecruitmentById(recruitmentId);
         if (recruitmentsSaved.contains(recruitment)) {
             recruitmentsSaved.remove(recruitment);
             msgFolJob = "Đã bỏ lưu công việc!";
@@ -465,7 +463,7 @@ public class CandidateController {
             msgFolJob = "Lưu thành công!";
         }
 
-        commonService.saveUser(user);
+        candidateService.saveUser(user);
 
         theRedirectModel.addFlashAttribute("msgFolJob", msgFolJob);
     }
@@ -481,18 +479,18 @@ public class CandidateController {
         HttpSession session = http.getSession();
         User userSes = (User) session.getAttribute("user");
 
-        User user = commonService.getUserById(userSes.getId());
+        User user = candidateService.getUserById(userSes.getId());
         List<Company> companiesFollowed = user.getCompanies();
 
         // Theo dõi hoặc bỏ theo dõi công ty
-        Company company = commonService.getCompanyById(companyId);
+        Company company = candidateService.getCompanyById(companyId);
         if (companiesFollowed.contains(company)) {
             companiesFollowed.remove(company);
         } else {
             companiesFollowed.add(company);
         }
 
-        commonService.saveUser(user);
+        candidateService.saveUser(user);
 
         return "redirect:/company/detail/" + companyId;
     }
@@ -515,7 +513,7 @@ public class CandidateController {
         HttpSession session = http.getSession();
         User userSes = (User) session.getAttribute("user");
 
-        Page<Recruitment> page = commonService.findRecruitmentSavedPagination(userSes.getId(), pageNo, 5);
+        Page<Recruitment> page = candidateService.findRecruitmentSavedPagination(userSes.getId(), pageNo, 5);
         List<Recruitment> recruitmentsSaved = page.getContent();
 
         theModel.addAttribute("recruitmentsSaved", recruitmentsSaved);
@@ -540,7 +538,7 @@ public class CandidateController {
         HttpSession session = http.getSession();
         User userSes = (User) session.getAttribute("user");
 
-        Page<ApplyPost> page = commonService.findApplyPostPagination(userSes.getId(), pageNo, 5);
+        Page<ApplyPost> page = candidateService.findApplyPostPagination(userSes.getId(), pageNo, 5);
         List<ApplyPost> applyPosts = page.getContent();
 
         theModel.addAttribute("applyPosts", applyPosts);
@@ -556,9 +554,9 @@ public class CandidateController {
     @PostMapping("/deleteApplyPost")
     public String deleteApplyPost(@RequestParam("applyPostId") int applyPostId) {
 
-        ApplyPost applyPost = commonService.getApplyPostById(applyPostId);
+        ApplyPost applyPost = candidateService.getApplyPostById(applyPostId);
 
-        commonService.deleteApplyPost(applyPost);
+        candidateService.deleteApplyPost(applyPost);
 
         return "redirect:/candidate/jobAppliedList";
     }
@@ -566,9 +564,9 @@ public class CandidateController {
     @PostMapping("/deleteJobSaved")
     public String deleteJobSaved(@RequestParam("recruitmentId") int recruitmentId) {
 
-        Recruitment recruitment = commonService.getRecruitmentById(recruitmentId);
+        Recruitment recruitment = candidateService.getRecruitmentById(recruitmentId);
 
-        commonService.deleteRecruitment(recruitment);
+        candidateService.deleteRecruitment(recruitment);
 
         return "redirect:/candidate/jobSavedList";
     }
@@ -591,7 +589,7 @@ public class CandidateController {
         HttpSession session = http.getSession();
         User userSes = (User) session.getAttribute("user");
 
-        Page<Company> page = commonService.findCompanyFollowedPagination(userSes.getId(), pageNo, 5);
+        Page<Company> page = candidateService.findCompanyFollowedPagination(userSes.getId(), pageNo, 5);
         List<Company> companiesFollowed = page.getContent();
 
         theModel.addAttribute("companiesFollowed", companiesFollowed);
@@ -605,13 +603,13 @@ public class CandidateController {
     @PostMapping("/unfollowCompany")
     public String unFollowCompany(@RequestParam("companyId") int companyId, @RequestParam("userId") int userId) {
 
-        User user = commonService.getUserById(userId);
+        User user = candidateService.getUserById(userId);
         List<Company> companiesFollowed = user.getCompanies();
-        Company company = commonService.getCompanyById(companyId);
+        Company company = candidateService.getCompanyById(companyId);
 
         companiesFollowed.remove(company);
 
-        commonService.saveUser(user);
+        candidateService.saveUser(user);
 
         return "redirect:/candidate/companiesFollowed";
     }
@@ -638,12 +636,12 @@ public class CandidateController {
          */
         HttpSession session = http.getSession();
         User userSes = (User) session.getAttribute("user");
-        User user = commonService.getUserById(userSes.getId());
+        User user = candidateService.getUserById(userSes.getId());
         List<Recruitment> recruitmentsSaved = user.getRecruitments();
 
-        Company company = commonService.getCompanyById(companyId);
+        Company company = candidateService.getCompanyById(companyId);
 
-        Page<Recruitment> page = commonService.findRecruitmentManagePagination(company.getId(), pageNo, 5);
+        Page<Recruitment> page = candidateService.findRecruitmentManagePagination(company.getId(), pageNo, 5);
         List<Recruitment> recruitments = page.getContent();
 
         theModel.addAttribute("recruitmentsSaved", recruitmentsSaved);

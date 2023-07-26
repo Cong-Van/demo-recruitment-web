@@ -3,7 +3,7 @@ package com.funix.prj_321x.asm02.controller;
 import com.funix.prj_321x.asm02.DTO.CompanyDTO;
 import com.funix.prj_321x.asm02.DTO.UserDTO;
 import com.funix.prj_321x.asm02.entity.*;
-import com.funix.prj_321x.asm02.service.CommonService;
+import com.funix.prj_321x.asm02.service.AuthService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -19,21 +19,19 @@ import java.util.List;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private CommonService commonService;
+    private AuthService authService;
 
-    public AuthController(CommonService commonService) {
-        this.commonService = commonService;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
-
-
 
     @PostMapping("/update-profile")
     public String updateProfile(@ModelAttribute("userDTO") UserDTO userDTO, Model theModel) {
 
         // Lấy ra user và cập nhật thông tin cho user
-        User user = commonService.getUserByEmail(userDTO.getEmail());
-        commonService.setUserInf(user, userDTO);
-        commonService.saveUser(user);
+        User user = authService.getUserByEmail(userDTO.getEmail());
+        authService.setUserInf(user, userDTO);
+        authService.saveUser(user);
 
         return "redirect:/profile";
     }
@@ -47,16 +45,16 @@ public class AuthController {
         Lấy ra company và cập nhật thông tin cho company
         Tạo mới company và liên kết với user nếu chưa có
          */
-        User user = commonService.getUserById(userId);
-        Company company = commonService.getCompanyByUserId(userId);
+        User user = authService.getUserById(userId);
+        Company company = authService.getCompanyByUserId(userId);
 
         if (company == null) {
             company = new Company();
             company.setUser(user);
         }
 
-        commonService.setCompanyInf(company, companyDTO);
-        commonService.saveCompany(company);
+        authService.setCompanyInf(company, companyDTO);
+        authService.saveCompany(company);
 
         return "redirect:/profile";
     }
@@ -66,7 +64,7 @@ public class AuthController {
     @GetMapping("/postRecruitment")
     public String postRecruitment(Model theModel) {
 
-        List<Category> categories = commonService.getAllCategory();
+        List<Category> categories = authService.getAllCategory();
 
         theModel.addAttribute("newRecruitment", new Recruitment());
         theModel.addAttribute("categories", categories);
@@ -87,15 +85,15 @@ public class AuthController {
          */
         HttpSession session = http.getSession();
         User userSes = (User) session.getAttribute("user");
-        Company company = commonService.getCompanyByUserId(userSes.getId());
+        Company company = authService.getCompanyByUserId(userSes.getId());
 
         if (company != null) {
             newRecruitment.setCompany(company);
-            commonService.saveRecruitment(newRecruitment);
+            authService.saveRecruitment(newRecruitment);
 
-            Category category = commonService.getCategoryById(newRecruitment.getCategory().getId());
+            Category category = authService.getCategoryById(newRecruitment.getCategory().getId());
             category.setNumberChoose(category.getNumberChoose() + 1);
-            commonService.saveCategory(category);
+            authService.saveCategory(category);
 
             success = true;
         }
@@ -123,12 +121,12 @@ public class AuthController {
         // Tìm công ty được quản lý theo HR, nếu chưa có tạo mới (companyId = 0)
         HttpSession session = http.getSession();
         User userSes = (User) session.getAttribute("user");
-        Company company = commonService.getCompanyByUserId(userSes.getId());
+        Company company = authService.getCompanyByUserId(userSes.getId());
         if (company == null) company = new Company();
 
         int pageSize = 5;
 
-        Page<Recruitment> eachPage = commonService.findRecruitmentManagePagination(company.getId(), page, pageSize);
+        Page<Recruitment> eachPage = authService.findRecruitmentManagePagination(company.getId(), page, pageSize);
         List<Recruitment> recruitments = eachPage.getContent();
 
         theModel.addAttribute("recruitments", recruitments);
@@ -141,8 +139,8 @@ public class AuthController {
     @GetMapping("/recruitmentForUpdate/{recruitmentId}")
     public String showRecruitmentForUpdate(@PathVariable("recruitmentId") int recruitmentId, Model theModel) {
 
-        Recruitment recruitment = commonService.getRecruitmentById(recruitmentId);
-        List<Category> categories = commonService.getAllCategory();
+        Recruitment recruitment = authService.getRecruitmentById(recruitmentId);
+        List<Category> categories = authService.getAllCategory();
 
         theModel.addAttribute("recruitment", recruitment);
         theModel.addAttribute("categories", categories);
@@ -154,9 +152,9 @@ public class AuthController {
     public String updateRecruitment(@ModelAttribute("recruitment") Recruitment recruitment,
                                     @RequestParam("recruitmentId") int recruitmentId) {
 
-        Recruitment recruitmentUpdate = commonService.getRecruitmentById(recruitmentId);
+        Recruitment recruitmentUpdate = authService.getRecruitmentById(recruitmentId);
 
-        commonService.updateRecruitment(recruitmentUpdate, recruitment);
+        authService.updateRecruitment(recruitmentUpdate, recruitment);
 
         return "redirect:/auth/postList";
     }
@@ -164,13 +162,13 @@ public class AuthController {
     @PostMapping("deleteRecruitment")
     public String deleteRecruitment(@RequestParam("recruitmentId") int recruitmentId) {
 
-        Recruitment recruitment = commonService.getRecruitmentById(recruitmentId);
-        Category category = commonService.getCategoryById(recruitment.getCategory().getId());
+        Recruitment recruitment = authService.getRecruitmentById(recruitmentId);
+        Category category = authService.getCategoryById(recruitment.getCategory().getId());
 
-        commonService.deleteRecruitment(recruitment);
+        authService.deleteRecruitment(recruitment);
 
         category.setNumberChoose(category.getNumberChoose() - 1);
-        commonService.saveCategory(category);
+        authService.saveCategory(category);
 
         return "redirect:/auth/postList";
     }
@@ -190,13 +188,13 @@ public class AuthController {
         // Tìm công ty được quản lý theo HR, nếu chưa có tạo mới (companyId = 0)
         HttpSession session = http.getSession();
         User userSes = (User) session.getAttribute("user");
-        Company company = commonService.getCompanyByUserId(userSes.getId());
+        Company company = authService.getCompanyByUserId(userSes.getId());
 
         if (company == null) company = new Company();
 
         int pageSize = 5;
 
-        Page<User> eachPage = commonService.findCandidatePagination(company.getId(), page, pageSize);
+        Page<User> eachPage = authService.findCandidatePagination(company.getId(), page, pageSize);
         List<User> candidates = eachPage.getContent();
 
         theModel.addAttribute("candidates", candidates);
@@ -210,9 +208,9 @@ public class AuthController {
     public String approveApplyPost(@PathVariable("applyPostId") int applyPostId,
                                    @PathVariable("recruitmentId") int recruitmentId) {
 
-        ApplyPost applyPost = commonService.getApplyPostById(applyPostId);
+        ApplyPost applyPost = authService.getApplyPostById(applyPostId);
         applyPost.setStatus(1);
-        commonService.saveApplyPost(applyPost);
+        authService.saveApplyPost(applyPost);
 
         return "redirect:/recruitment/detail/" + recruitmentId;
     }

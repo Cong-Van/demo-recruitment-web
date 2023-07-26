@@ -72,7 +72,7 @@ public class SecurityConfig {
                                     UserDetails userDetails = (UserDetails) authentication.getPrincipal();
                                     String email = userDetails.getUsername();
 
-                                    // Truy vấn thông tin người dùng từ CSDL dựa trên email và password
+                                    // Lấy thông tin người dùng từ CSDL theo email và password để đưa vào session
                                     User user = commonService.getUserByEmail(email);
 
                                     HttpSession session = request.getSession();
