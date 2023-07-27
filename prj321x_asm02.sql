@@ -4,13 +4,13 @@ create database prj321x_asm02;
 
 use prj321x_asm02;
 
-create table role(
-	id int(11) not null auto_increment primary key,
+create table roles (
+	id int not null auto_increment primary key,
     role_name varchar(255)
 );
 
-create table user(
-	id int(11) not null auto_increment primary key,
+create table users (
+	id int not null auto_increment primary key,
     address varchar(255),
     description varchar(255),
     email varchar(255) not null,
@@ -20,87 +20,87 @@ create table user(
     phone_number varchar(255),
     status int(11) not null,
     role_id int(11) not null,
-    foreign key(role_id) references role(id)
+    foreign key(role_id) references roles (id)
 );
 
-create table cv(
-	id int(11) not null auto_increment primary key,
+create table cvs (
+	id int not null auto_increment primary key,
     file_name varchar(255),
-    user_id int(11),
-    foreign key(user_id) references user(id)
+    user_id int,
+    foreign key(user_id) references users (id)
 );
 
-create table company(
-	id int(11) not null auto_increment primary key,
+create table companies (
+	id int not null auto_increment primary key,
     address varchar(255),
     description text,
     email varchar(255),
     logo varchar(255),
 	company_name varchar(255),
     phone_number varchar(255),
-    status int(11) not null,
-    user_id int(11) not null,
-    foreign key(user_id) references user(id)
+    status int not null,
+    user_id int not null,
+    foreign key(user_id) references users (id)
 );
 
-create table follow_company(
-	id int(11) not null auto_increment primary key,
-    company_id int(11) not null,
-    user_id int(11) not null,
-    foreign key(company_id) references company(id),
-    foreign key(user_id) references user(id)
+create table follow_companies (
+	id int not null auto_increment primary key,
+    company_id int not null,
+    user_id int not null,
+    foreign key(company_id) references companies (id),
+    foreign key(user_id) references users (id)
 );
 
-create table category(
-	id int(11) not null auto_increment primary key,
+create table categories (
+	id int not null auto_increment primary key,
     name varchar(255) not null,
-    number_choose int(11) default 0
+    number_choose int default 0
 );
 
 create table recruitment(
-	id int(11) not null auto_increment primary key,
+	id int not null auto_increment primary key,
     address varchar(255),
     created_at date default (curdate()),
     description varchar(255),
     experience varchar(255),
-    quantity int(11) not null,
+    quantity int not null,
     salary varchar(255),
-    status int(11),
+    status int,
     title varchar(255),
     type varchar(255),
-    view int(11) default 0,
+    view int default 0,
     deadline date,
-    category_id int(11) not null,
-    company_id int(11) not null,
-    foreign key(category_id) references category(id),
-    foreign key(company_id) references company(id)
+    category_id int not null,
+    company_id int not null,
+    foreign key(category_id) references categories (id),
+    foreign key(company_id) references companies (id)
 );
 
 create table save_job(
-	id int(11) not null auto_increment primary key,
-    recruitment_id int(11) not null,
-    user_id int(11) not null,
-    foreign key(recruitment_id) references recruitment(id),
-    foreign key(user_id) references user(id)
+	id int not null auto_increment primary key,
+    recruitment_id int not null,
+    user_id int not null,
+    foreign key(recruitment_id) references recruitments (id),
+    foreign key(user_id) references users (id)
 );
 
-create table apply_post(
-	id int(11) not null auto_increment primary key,
+create table apply_posts (
+	id int not null auto_increment primary key,
     created_at date default (curdate()),
-    status int(11) not null,
+    status int not null,
     text varchar(255),
-    recruitment_id int(11) not null,
-    user_id int(11) not null,
+    recruitment_id int not null,
+    user_id int not null,
     cv_name varchar(255) not null,
-    foreign key(recruitment_id) references recruitment(id),
-    foreign key(user_id) references user(id)
+    foreign key(recruitment_id) references recruitments (id),
+    foreign key(user_id) references users (id)
 );
 
-insert into role 
+insert into roles
 values(1, "Công ty"), 
 	  (2, "Ứng cử viên");
       
-insert into category(name)
+insert into categories (name)
 values("NODEJS"),
 	  ("PHP"),
       ("JAVA"),
