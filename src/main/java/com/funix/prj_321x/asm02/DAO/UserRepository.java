@@ -18,7 +18,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query(value = "SELECT * FROM users u JOIN " +
             "(SELECT user_id, company_id from apply_posts a JOIN recruitments r ON a.recruitment_id = r.id " +
-            "WHERE company_id = ?1 GROUP BY user_id) a " +
+            "WHERE company_id = ?1 GROUP BY user_id, company_id) a " +
             "ON u.id = a.user_id", nativeQuery = true)
     Page<User> findAllCandidateByCompanyId(int companyId, PageRequest pageable);
 }
