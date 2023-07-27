@@ -3,7 +3,7 @@ package com.funix.prj_321x.asm02.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "cv")
+@Table(name = "cvs")
 public class Cv {
 
     @Id
