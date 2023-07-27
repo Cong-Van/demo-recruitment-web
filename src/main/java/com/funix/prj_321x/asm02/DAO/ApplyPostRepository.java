@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface ApplyPostRepository extends JpaRepository<ApplyPost, Integer> {
     ApplyPost findAllByUserIdAndRecruitmentId(int userId, int recruitmentId);
 
-    @Query(value = "SELECT * FROM apply_post WHERE user_id = ?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM apply_posts WHERE user_id = ?1", nativeQuery = true)
     Page<ApplyPost> findAllByUserId(int UserId, Pageable pageable);
 }

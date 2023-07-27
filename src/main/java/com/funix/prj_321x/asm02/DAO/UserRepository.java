@@ -10,14 +10,14 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-    @Query(value = "SELECT * FROM user WHERE role_id=?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM users WHERE role_id=?1", nativeQuery = true)
     List<User> findAllByRoleId(int theId);
 
-    @Query(value = "SELECT * FROM user u WHERE email=?1", nativeQuery = true)
+    @Query(value = "SELECT * FROM users u WHERE email=?1", nativeQuery = true)
     User findUserByEmail(String email);
 
-    @Query(value = "SELECT * FROM user u JOIN " +
-            "(SELECT user_id, company_id from apply_post a JOIN recruitment r ON a.recruitment_id = r.id " +
+    @Query(value = "SELECT * FROM users u JOIN " +
+            "(SELECT user_id, company_id from apply_posts a JOIN recruitments r ON a.recruitment_id = r.id " +
             "WHERE company_id = ?1 GROUP BY user_id) a " +
             "ON u.id = a.user_id", nativeQuery = true)
     Page<User> findAllCandidateByCompanyId(int companyId, PageRequest pageable);

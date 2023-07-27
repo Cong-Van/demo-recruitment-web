@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
-    @Query(value = "SELECT * FROM category ORDER BY number_choose DESC LIMIT 4", nativeQuery = true)
+    @Query(value = "SELECT * FROM categories ORDER BY number_choose DESC LIMIT 4", nativeQuery = true)
     List<Category> findTopCategories();
 }

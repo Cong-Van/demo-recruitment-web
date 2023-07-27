@@ -11,14 +11,14 @@ import java.util.List;
 public interface CompanyRepository extends JpaRepository<Company, Integer> {
     Company findByUserId(int theId);
 
-    @Query(value = "SELECT * FROM company c JOIN (SELECT sum(count) AS sum, company_id " +
-            "FROM recruitment r JOIN " +
-            "(SELECT count(recruitment_id) AS count, recruitment_id FROM apply_post GROUP BY recruitment_id) a " +
+    @Query(value = "SELECT * FROM companies c JOIN (SELECT sum(count) AS sum, company_id " +
+            "FROM recruitments r JOIN " +
+            "(SELECT count(recruitment_id) AS count, recruitment_id FROM apply_posts GROUP BY recruitment_id) a " +
             "ON r.id = a.recruitment_id GROUP BY company_id ORDER BY sum DESC LIMIT 3) a " +
             "ON c.id = a.company_id ORDER BY sum DESC", nativeQuery = true)
     List<Company> findTopCompanies();
 
     @Query(value = "SELECT c.id, address, description, email, logo, company_name, phone_number, status, c.user_id " +
-            "FROM company c JOIN follow_company f ON c.id = f.company_id WHERE f.user_id = ?1", nativeQuery = true)
+            "FROM companies c JOIN follow_companies f ON c.id = f.company_id WHERE f.user_id = ?1", nativeQuery = true)
     Page<Company> findCompanyByUserId(int theId, Pageable pageable);
 }
