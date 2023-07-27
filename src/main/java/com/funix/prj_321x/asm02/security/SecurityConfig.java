@@ -38,12 +38,12 @@ public class SecurityConfig {
 
         // define query to retrieve a user by username
         jdbcUserDetailsManager.setUsersByUsernameQuery(
-                "SELECT email, password, status FROM user WHERE email = ?"
+                "SELECT email, password, status FROM users WHERE email = ?"
         );
 
         // define query to retrieve the authorities/roles by username
         jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(
-                "SELECT u.email, r.role_name FROM role r JOIN user u ON u.role_id = r.id WHERE u.email=?"
+                "SELECT u.email, r.role_name FROM roles r JOIN users u ON u.role_id = r.id WHERE u.email=?"
         );
 
         return jdbcUserDetailsManager;
