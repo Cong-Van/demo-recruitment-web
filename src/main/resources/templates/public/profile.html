@@ -193,7 +193,7 @@
     <!-- Xác thực email cho User là đại diện Công ty -->
     <div
       sec:authorize="hasAuthority('Công ty')"
-      th:if="${session.user.status == 0}"
+      th:if="${userDTO.confirmAccount == 0}"
       class="container-fluid"
       style="text-align: center"
     >
@@ -208,6 +208,7 @@
         Xác thực email đăng nhập
       </p>
       <div
+        th:unless="${comfirm_await}"
         style="
           width: 600px;
           height: 400px;
@@ -218,13 +219,12 @@
         "
       >
         <p style="line-height: 35px; font-size: 16px">
-          Xin chào, <span th:text="${userDTO.fullName}"></span> và làm theo
-          hướng dẫn trong email. Trường hợp không nhận được email, bạn vui lòng
-          bấm nút Nhận email xác thực dưới đây.
+          Xin chào, <span th:text="${userDTO.fullName}"></span>. Bạn đã đăng ký tài khoản với tư cách là nhà tuyển dụng.
+          Vui lòng bấm nút Nhận email xác thực dưới đây và xác thực tài khoản với đường link chúng tôi đã gửi vào email.
         </p>
         <div class="row form-group">
           <form
-            th:action="@{/auth/confirmAccount}"
+            th:action="@{/auth/verifyAccount}"
             method="post"
             class="col-md-12"
           >
@@ -257,9 +257,7 @@
         "
       >
         <p style="line-height: 35px; font-size: 16px">
-          Xin chào, <span th:text="${userDTO.fullName}"></span> .Bạn đã gửi yêu
-          cầu xác thực thành công, vui lòng kiểm tra mail để xác thực.Cảm ơn
-          bạn!!!
+          Bạn đã gửi yêu cầu xác thực thành công, vui lòng kiểm tra mail để xác thực.Cảm ơn bạn!!!
         </p>
         <p>Mọi thắc mắc vui lòng liên hệ bộ phận CSKH của WorkCV:<br /></p>
         - Điện thoại:<span style="color: #5f80ec">(024) 6680 5588</span><br />
@@ -490,7 +488,7 @@
     <!-- Cập nhật thông tin cho User là đại diện Công ty -->
     <section
       sec:authorize="hasAuthority('Công ty')"
-      th:if="${session.user.status == 1}"
+      th:if="${userDTO.confirmAccount == 1}"
       class="site-section"
       style="margin-top: 10px"
     >

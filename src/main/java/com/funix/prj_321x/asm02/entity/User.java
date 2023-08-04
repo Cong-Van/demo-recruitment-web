@@ -37,6 +37,9 @@ public class User {
     @Column(name = "status")
     private int status;
 
+    @Column(name = "confirm_account")
+    private int confirmAccount;
+
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
@@ -69,6 +72,7 @@ public class User {
 
     public User() {
         this.status = 1;
+        this.confirmAccount = 0;
     }
 
     public int getId() {
@@ -143,6 +147,14 @@ public class User {
         this.status = status;
     }
 
+    public int getConfirmAccount() {
+        return confirmAccount;
+    }
+
+    public void setConfirmAccount(int confirmAccount) {
+        this.confirmAccount = confirmAccount;
+    }
+
     public Role getRole() {
         return role;
     }
@@ -204,6 +216,7 @@ public class User {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", status=" + status +
                 ", role=" + role +
+                ", confirmAccount=" + confirmAccount +
                 '}';
     }
 

@@ -60,6 +60,7 @@ public class CommonServiceImp implements CommonService{
         userDTO.setAddress(user.getAddress());
         userDTO.setPhoneNumber(user.getPhoneNumber());
         userDTO.setDescription(user.getDescription());
+        userDTO.setConfirmAccount(user.getConfirmAccount());
     }
 
     @Override

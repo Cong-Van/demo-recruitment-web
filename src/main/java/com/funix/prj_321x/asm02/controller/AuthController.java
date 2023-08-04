@@ -5,14 +5,18 @@ import com.funix.prj_321x.asm02.DTO.UserDTO;
 import com.funix.prj_321x.asm02.entity.*;
 import com.funix.prj_321x.asm02.service.AuthService;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @Controller
@@ -23,6 +27,21 @@ public class AuthController {
 
     public AuthController(AuthService authService) {
         this.authService = authService;
+    }
+
+    @PostMapping("/verifyAccount")
+    public String confirmAccount(@ModelAttribute("userDTO") User userDTO, RedirectAttributes theRedirectModel) throws MessagingException, UnsupportedEncodingException {
+        String email = userDTO.getEmail();
+        String confirmUrl = getCurrentUrl() + "/" + email;
+        authService.sendEmailToVerify(email, confirmUrl);
+        theRedirectModel.addFlashAttribute("comfirm_await", true);
+        return "redirect:/profile";
+    }
+
+    @GetMapping("/verifyAccount/{email}")
+    public String verifyAccount(@PathVariable("email") String email) {
+        authService.verifyAccount(email);
+        return "redirect:/profile";
     }
 
     @PostMapping("/update-profile")
@@ -215,4 +234,8 @@ public class AuthController {
         return "redirect:/recruitment/detail/" + recruitmentId;
     }
 
+    private String getCurrentUrl() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        return request.getRequestURL().toString();
+    }
 }

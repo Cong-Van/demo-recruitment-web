@@ -19,6 +19,7 @@ You can use demo on: https://demo-recruitment-web.onrender.com
 Before you do anything, you'll be taken to a login page where you can sign up if you don't have an account.
 You can register as a Company(Công ty) to find candidates or register as a Candidate(Ứng cử viên) to find a job.
 After the appropriate registration, you can log in to use.
+For Company(Công ty), you need to go to Profile(Hồ sơ) to verify your email. (avoid spamming to create an employer account)
 
 
 - List of features - LoF

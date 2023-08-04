@@ -4,10 +4,15 @@ import com.funix.prj_321x.asm02.DAO.*;
 import com.funix.prj_321x.asm02.DTO.CompanyDTO;
 import com.funix.prj_321x.asm02.DTO.UserDTO;
 import com.funix.prj_321x.asm02.entity.*;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @Service
@@ -18,15 +23,17 @@ public class AuthServiceImp implements AuthService{
     private RecruitmentRepository recruitmentRepository;
     private CategoryRepository categoryRepository;
     private ApplyPostRepository applyPostRepository;
+    private JavaMailSender javaMailSender;
 
     public AuthServiceImp(UserRepository userRepository, CompanyRepository companyRepository,
                           RecruitmentRepository recruitmentRepository, CategoryRepository categoryRepository,
-                          ApplyPostRepository applyPostRepository) {
+                          ApplyPostRepository applyPostRepository, JavaMailSender javaMailSender) {
         this.userRepository = userRepository;
         this.companyRepository = companyRepository;
         this.recruitmentRepository = recruitmentRepository;
         this.categoryRepository = categoryRepository;
         this.applyPostRepository = applyPostRepository;
+        this.javaMailSender = javaMailSender;
     }
 
     @Override
@@ -137,6 +144,31 @@ public class AuthServiceImp implements AuthService{
     @Override
     public void saveApplyPost(ApplyPost applyPost) {
         applyPostRepository.save(applyPost);
+    }
+
+    @Override
+    public void sendEmailToVerify(String email, String confirmUrl) throws MessagingException, UnsupportedEncodingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        String subject = "Verify employer account";
+        String content = "<p>Hello,</p>" +
+                "<p>Bạn đã tạo một tài khoản là nhà tuyển dụng trong trang web của chúng tôi. Bấm vào link dưới đây để xác thực: </p>" +
+                "<p style=\"color: blue;\"><a href=\"" + confirmUrl + "\">Confirm account</a></p>";
+
+        helper.setFrom("conglvfx20485@funix.edu.vn", "Admin");
+        helper.setTo(email);
+        helper.setSubject(subject);
+        helper.setText(content, true);
+
+        javaMailSender.send(message);
+    }
+
+    @Override
+    public void verifyAccount(String email) {
+        User user = userRepository.findUserByEmail(email);
+        user.setConfirmAccount(1);
+        userRepository.save(user);
     }
 
 

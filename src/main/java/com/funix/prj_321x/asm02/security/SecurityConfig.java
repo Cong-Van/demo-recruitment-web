@@ -54,7 +54,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(configurer ->
                         configurer
-                                .requestMatchers("/", "/register", "/assets/**").permitAll()
+                                .requestMatchers("/", "/register", "/assets/**", "/auth/verifyAccount/**").permitAll()
                                 .requestMatchers("/profile").hasAnyAuthority("Công ty", "Ứng cử viên")
                                 .requestMatchers("/recruitment/**").hasAnyAuthority("Công ty", "Ứng cử viên")
                                 .requestMatchers("/company/**").hasAnyAuthority("Công ty", "Ứng cử viên")

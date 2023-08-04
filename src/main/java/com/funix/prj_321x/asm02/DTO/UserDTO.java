@@ -28,9 +28,9 @@ public class UserDTO {
 
     private Role role;
 
-    public UserDTO() {
+    private int confirmAccount;
 
-    }
+    public UserDTO() {}
 
     public int getId() {
         return id;
@@ -110,5 +110,13 @@ public class UserDTO {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public int getConfirmAccount() {
+        return confirmAccount;
+    }
+
+    public void setConfirmAccount(int confirmAccount) {
+        this.confirmAccount = confirmAccount;
     }
 }

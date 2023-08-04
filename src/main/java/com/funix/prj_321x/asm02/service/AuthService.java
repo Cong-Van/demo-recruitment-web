@@ -3,8 +3,10 @@ package com.funix.prj_321x.asm02.service;
 import com.funix.prj_321x.asm02.DTO.CompanyDTO;
 import com.funix.prj_321x.asm02.DTO.UserDTO;
 import com.funix.prj_321x.asm02.entity.*;
+import jakarta.mail.MessagingException;
 import org.springframework.data.domain.Page;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public interface AuthService {
@@ -44,4 +46,8 @@ public interface AuthService {
     ApplyPost getApplyPostById(int id);
 
     void saveApplyPost(ApplyPost applyPost);
+
+    void sendEmailToVerify(String email, String confirmUrl) throws MessagingException, UnsupportedEncodingException;
+
+    void verifyAccount(String email);
 }

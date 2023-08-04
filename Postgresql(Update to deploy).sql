@@ -14,6 +14,7 @@ CREATE TABLE users (
     phone_number varchar(255),
     status int NOT NULL,
     role_id int NOT NULL,
+    confirm_account int,
     FOREIGN KEY (role_id) REFERENCES roles (id)
 );
 

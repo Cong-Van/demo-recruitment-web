@@ -18,8 +18,9 @@ create table users (
     image varchar(255),
     password varchar(128) not null,
     phone_number varchar(255),
-    status int(11) not null,
-    role_id int(11) not null,
+    status int not null,
+    role_id int not null,
+    confirm_account int,
     foreign key(role_id) references roles (id)
 );
 
