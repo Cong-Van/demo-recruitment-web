@@ -44,6 +44,15 @@ Spring Boot 3, Spring Security, Thymeleaf, JPA.
 Docker and Render website to deploy.
 
 
+- Deploy on Render
+
+Add Dependencies Postgresql.
+Create Postgres database on Render and modify connection params in application file.
+Create Docker file and config.
+Create repository on GitHub (To connect). 
+Create Web Service and deploy by Docker.
+
+
 - Acknowledgments
 
 Security: login with registered account. Display the page and functions corresponding to the role.
